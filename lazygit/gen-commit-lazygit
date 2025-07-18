@@ -1,0 +1,65 @@
+#!/bin/bash
+
+base_prompt="Create a conventional commit message for these changes. If there are multiple features or changes, list them with bullet points ('-') on separate lines. For scope, as prefix: use 'backend' for Go or other backend files, 'frontend' for Svelte or other frontend specific files, and if both are changed use the general feature scope instead. Eg: 'feat(backend/git): add new API endpoint'. If previous commits don't follow conventional format, maintain their style instead. Use the same idiom for the commit message as the previous commits"
+if [ "$1" = "wip" ]; then
+    prompt="$base_prompt Prefix with wip() to indicate work in progress."
+else
+    prompt="$base_prompt"
+fi
+
+context=$(
+  echo -e "=== Last commits ===\n"
+  git log -5 | sed 's/[^[:print:]]//g'
+
+  echo -e "\n=== Staged Changes ===\n"
+
+  changed_files=$(git diff --staged --name-only | sed 's/[^[:print:]]//g')
+  staged_changes=""
+
+  # Ignore some changes to avoid noise 
+  # lock files, binary, in those cases, just send their names
+  # Define array of ignored file patterns
+  ignore_patterns=(".lock" ".bin" ".exe" ".dll" ".so" ".jpg" ".jpeg" ".png" ".gif" ".bmp" ".ico" ".svg" ".webp" ".mp4" ".mov" ".avi")
+
+  # Loop through each changed file
+  while IFS= read -r file; do
+    # Check if file matches any ignore pattern
+    should_ignore=false
+    for pattern in "${ignore_patterns[@]}"; do
+      if [[ "$file" == *"$pattern"* ]]; then
+        should_ignore=true
+        break
+      fi
+    done
+
+    if [ "$should_ignore" = true ]; then
+      # Just append filename for ignored files
+      staged_changes+="$(echo "$file" | sed 's/[^[:print:]]//g')\n"
+    else
+      # Append full diff for non-ignored files
+      diff=$(git diff --cached "$file" | sed 's/[^[:print:]]//g')
+      staged_changes+="$diff\n"
+    fi
+  done <<< "$changed_files"
+
+  # Translit to utf-8
+  staged_changes=$(echo "$staged_changes" | iconv -c -f utf-8 -t utf-8 | sed 's/[^[:print:]]//g')
+
+  echo -e "$staged_changes"
+)
+
+full_prompt=\
+''"$prompt Just the commit message, multiple
+lines if necessary . Just the commit message NOTHING ELSE. If no data is shown
+or if you only see file paths with no diff content making it difficult to
+understand the changes, just write the '\'\'\'' (empty string) character: '\'\'\''
+
+
+<gencommit_prompt_context>
+$context
+</gencommit_prompt_context>
+"''
+
+message=$(echo $full_prompt | mods -q)
+
+echo -e "$message"
