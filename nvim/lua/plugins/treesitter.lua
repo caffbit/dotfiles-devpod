@@ -6,31 +6,25 @@ return { -- Highlight, edit, and navigate code
   opts = {
     ensure_installed = {
       'lua',
-      'python',
       'javascript',
       'typescript',
-      'vimdoc',
-      'vim',
-      'regex',
-      'terraform',
-      'sql',
-      'dockerfile',
-      'toml',
+      'tsx', -- React TSX files (includes JSX support)
+      'html',
+      'css',
+      'scss', -- Sass/SCSS
       'json',
-      'java',
-      'groovy',
-      'go',
-      'gitignore',
-      'graphql',
       'yaml',
-      'make',
-      'cmake',
       'markdown',
       'markdown_inline',
       'bash',
-      'tsx',
-      'css',
-      'html',
+      'vim',
+      'vimdoc',
+      'regex',
+      'gitignore',
+      'dockerfile',
+      'toml',
+      'graphql', -- GraphQL queries
+      'jsdoc', -- JSDoc comments
     },
     -- Autoinstall languages that are not installed
     auto_install = true,

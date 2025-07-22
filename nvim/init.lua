@@ -11,8 +11,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   end
 end
 
-local rtp = vim.opt.rtp
-rtp:prepend(lazypath)
+vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup {
   require 'plugins.neotree',
@@ -23,11 +22,11 @@ require('lazy').setup {
   require 'plugins.telescope',
   require 'plugins.lsp',
   require 'plugins.autocompletion',
-  require 'plugins.autoformat',
+  require 'plugins.none-ls',
   require 'plugins.gitsigns',
   require 'plugins.alpha',
   require 'plugins.indent-blankline',
   require 'plugins.misc',
-  -- require 'plugins.copilot',
+  require 'plugins.comment',
   require 'plugins.lazygit',
 }

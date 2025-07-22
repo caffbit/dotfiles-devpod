@@ -5,7 +5,7 @@ return {
     'nvim-lua/plenary.nvim',
     'nvim-tree/nvim-web-devicons',
     'MunifTanjim/nui.nvim',
-    -- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
+    '3rd/image.nvim', -- Optional image support in preview window: See `# Preview Mode` for more information
     {
       's1n7ax/nvim-window-picker',
       version = '2.*',
@@ -26,9 +26,7 @@ return {
       end,
     },
   },
-  lazy = false,
   config = function()
-    
     require('neo-tree').setup {
       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
       popup_border_style = 'rounded',
@@ -304,14 +302,6 @@ return {
       },
     }
 
-    vim.api.nvim_create_autocmd('FileType', {
-      pattern = 'neo-tree',
-      callback = function()
-        vim.opt_local.sidescrolloff = 0
-        vim.opt_local.wrap = false
-        vim.opt_local.scrolloff = 0
-      end,
-    })
     vim.cmd [[nnoremap \ :Neotree reveal<cr>]]
     vim.keymap.set('n', '<leader>e', ':Neotree toggle position=left<CR>', { noremap = true, silent = true }) -- focus file explorer
     vim.keymap.set('n', '<leader>ngs', ':Neotree float git_status<CR>', { noremap = true, silent = true }) -- open git status window

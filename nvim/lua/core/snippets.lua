@@ -4,42 +4,41 @@
 -- https://github.com/NvChad/NvChad/issues/1907
 vim.hl.priorities.semantic_tokens = 95 -- Or any number lower than 100, treesitter's priority level
 
--- Diagnostic Config
--- See :help vim.diagnostic.Opts
+-- Appearance of diagnostics
 vim.diagnostic.config {
-  severity_sort = true,
-  float = { border = 'rounded', source = 'if_many' },
-  underline = { severity = vim.diagnostic.severity.ERROR },
-  signs = vim.g.have_nerd_font and {
-    text = {
-      [vim.diagnostic.severity.ERROR] = '󰅚 ',
-      [vim.diagnostic.severity.WARN] = '󰀪 ',
-      [vim.diagnostic.severity.INFO] = '󰋽 ',
-      [vim.diagnostic.severity.HINT] = '󰌶 ',
-    },
-  } or {},
   virtual_text = {
-    source = 'if_many',
-    spacing = 2,
+    prefix = '●',
+    -- Add a custom format function to show error codes
     format = function(diagnostic)
-      local diagnostic_message = {
-        [vim.diagnostic.severity.ERROR] = diagnostic.message,
-        [vim.diagnostic.severity.WARN] = diagnostic.message,
-        [vim.diagnostic.severity.INFO] = diagnostic.message,
-        [vim.diagnostic.severity.HINT] = diagnostic.message,
-      }
-      return diagnostic_message[diagnostic.severity]
+      local code = diagnostic.code and string.format('[%s]', diagnostic.code) or ''
+      return string.format('%s %s', code, diagnostic.message)
     end,
   },
+  underline = false,
+  update_in_insert = true,
+  float = {
+    source = true, -- Or "if_many"
+  },
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = ' ',
+      [vim.diagnostic.severity.WARN] = ' ',
+      [vim.diagnostic.severity.INFO] = ' ',
+      [vim.diagnostic.severity.HINT] = '󰌵 ',
+    },
+  },
+  -- Make diagnostic background transparent
+  on_ready = function()
+    vim.cmd 'highlight DiagnosticVirtualText guibg=NONE'
+  end,
 }
 
--- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.hl.on_yank()`
+-- Highlight on yank
+local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
-  desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.hl.on_yank()
   end,
+  group = highlight_group,
+  pattern = '*',
 })
