@@ -1,32 +1,23 @@
-default-model: claude-3.5-sonnet
+default-api: openrouter
+default-model: gmicrosoft/mai-ds-r1:free
 apis:
-  copilot:
-    base-url: https://api.githubcopilot.com
+  openrouter:
+    api-key:
+    api-key-env: OPENROUTER_API_KEY
+    base-url: https://openrouter.ai/api/v1
     models:
-      gpt-4o-2024-05-13:
-        aliases: ["4o-2024", "4o", "gpt-4o"]
-        max-input-chars: 392000
-      gpt-4:
-        aliases: ["4"]
-        max-input-chars: 24500
-      gpt-3.5-turbo:
-        aliases: ["35t"]
-        max-input-chars: 12250
-      o1-preview-2024-09-12:
-        aliases: ["o1-preview", "o1p"]
-        max-input-chars: 128000
-      claude-3.5-sonnet:
-        aliases: ["claude3.5-sonnet", "sonnet-3.5", "claude-3-5-sonnet"]
-        max-input-chars: 680000
-      o1-preview:
-        aliases: ["o1-preview"]
-        max-input-chars: 128000
-      o1-mini:
-        aliases: ["o1-mini", "o1m", "o1-mini-2024-09-12"]
-        max-input-chars: 128000
-      o3-mini:
-        aliases: ["o3m", "o3-mini"]
-        max-input-chars: 128000
-      gemini-2.0-flash-001:
-        aliases: ["gm2f", "flash-2", "gemini-2-flash"]
-        max-input-chars: 4194304
+      google/gemini-2.0-flash-exp:free:
+        aliases: ["or-gemini-flash-free", "gemini-exp"]
+        max-input-chars: 1048576
+      mistralai/mistral-small:
+        aliases: ["or-mistral", "openrouter-mistral"]
+        max-input-chars: 120000
+      meta-llama/llama-3-8b-instruct:
+        aliases: ["or-llama3", "openrouter-llama3"]
+        max-input-chars: 120000
+      anthropic/claude-3-haiku:
+        aliases: ["or-claude", "openrouter-claude3"]
+        max-input-chars: 120000
+      microsoft/mai-ds-r1:free:
+        aliases: ["or-mai-ds-r1", "mai-ds-r1"]
+        max-input-chars: 163840
