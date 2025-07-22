@@ -11,6 +11,14 @@ return { -- Autocompletion
         if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
           return
         end
+
+        local is_container = vim.fn.filereadable('/.dockerenv') == 1
+        local has_python = vim.fn.executable('python') == 1
+        local has_make = vim.fn.executable('make') == 1
+        if is_container or not has_python or not has_make then
+          return nil 
+        end
+
         return 'make install_jsregexp'
       end)(),
       dependencies = {
