@@ -13,6 +13,9 @@ ln -sf "$PWD/config.nix" "$XDG_CONFIG_HOME"/nixpkgs/config.nix
 # install Nix packages from config.nix
 nix-env -iA nixpkgs.myPackages
 
+# Update PATH to include Nix-installed binaries
+export PATH="$HOME/.nix-profile/bin:$PATH"
+
 # Set npm global prefix to avoid permission issues
 mkdir -p "$HOME"/.npm-global
 npm config set prefix ~/.npm-global
