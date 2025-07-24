@@ -13,6 +13,7 @@
           fd
           ripgrep
           fzf
+          tree-sitter
         ];
       };
     };
